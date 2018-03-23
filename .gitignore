@@ -1,0 +1,7 @@
+Industry4Control/bin/**
+Industry4Control/obj/**
+Industry4Control/Properties/**
+.vs/**
+*.exe
+*.dll
+*.pdb
