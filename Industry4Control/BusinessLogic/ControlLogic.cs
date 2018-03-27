@@ -1,5 +1,6 @@
 ﻿using Industry4Control.Interfaces;
 using Industry4Control.Constants;
+using Industry4Control.Utils;
 
 namespace Industry4Control.BusinessLogic
 {
@@ -40,8 +41,16 @@ namespace Industry4Control.BusinessLogic
 
                     break;
                 case AvailableDataType.Voice:
-                    VoiceChecker voiceChecker = new VoiceChecker();
-                    CompareResult result = voiceChecker.Compare(e.Data);
+                    if(e.ControlByte == 0x0)
+                    {
+                        VoiceChecker voiceChecker = new VoiceChecker();
+                        CompareResult result = voiceChecker.Compare(e.Data);
+                    }
+                    else 
+                    {
+                        Helper.SaveControlVoice(Helper.CreateParameterVectors(e.Data), (ControlFunction)e.ControlByte);
+                    }
+
                     break;
             }
         }

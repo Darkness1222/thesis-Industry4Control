@@ -6,10 +6,11 @@ namespace Industry4Control.EventArguments
     internal class DataAvailableEventArgs : EventArgs
     {
 
-        public DataAvailableEventArgs(AvailableDataType type, short[] data)
+        public DataAvailableEventArgs(AvailableDataType type, short[] data, byte controlByte)
         {
             AvailableDataType = type;
             Data = data;
+            ControlByte = controlByte;
         }
 
         public DataAvailableEventArgs(AvailableDataType type, byte controlByte)

@@ -81,7 +81,7 @@ namespace Industry4Control.BusinessLogic
                         HandleRequest(leaderBytes[1]);
                         break;
                     case 0xC:
-                        ReceiveData();
+                        ReceiveData(leaderBytes[1]);
                         break;
                 }
             }
@@ -97,7 +97,7 @@ namespace Industry4Control.BusinessLogic
             DataAvailable?.Invoke(this, new DataAvailableEventArgs(AvailableDataType.Request, request));
         }
 
-        private void ReceiveData()
+        private void ReceiveData(byte control)
         {
             TcpClient client = m_TcpListener.AcceptTcpClient();
             NetworkStream networkStream = client.GetStream();
@@ -110,7 +110,7 @@ namespace Industry4Control.BusinessLogic
                 dataInShort[i / 2] = (short)(dataInBytes[i] | dataInBytes[i + 1] << 8);
             }
 
-            DataAvailable?.Invoke(this, new DataAvailableEventArgs(AvailableDataType.Voice, dataInShort));
+            DataAvailable?.Invoke(this, new DataAvailableEventArgs(AvailableDataType.Voice, dataInShort, control));
         }
 
         #endregion

@@ -51,6 +51,7 @@
     <Compile Include="BusinessLogic\CompareResult.cs" />
     <Compile Include="BusinessLogic\CustomDtw.cs" />
     <Compile Include="BusinessLogic\VoiceChecker.cs" />
+    <Compile Include="Constants\Parameters.cs" />
     <Compile Include="Constants\ControlFunction.cs" />
     <Compile Include="Data\ParameterVector.cs" />
     <Compile Include="Data\SavedData.cs" />

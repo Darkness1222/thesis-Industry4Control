@@ -84,6 +84,59 @@ namespace Industry4Control.Utils
 
         #endregion
 
+        #region ParameterVector
+
+        public static ParameterVector[] CreateParameterVectors(short[] voice)
+        {
+            double[] hannWindow = Helper.GetHannWindow(Parameters.WindowSize);
+            double[] windowSizedSignal = new double[Parameters.WindowSize];
+            double[] spectrum;
+
+            ParameterVector[] pVectors = new ParameterVector[86];
+
+            int dataCounter = Parameters.WindowSize / 2;
+            int halfWindowSize = Parameters.WindowSize / 2;
+            int vectorIndex = 0;
+
+            while (dataCounter < voice.Length)
+            {
+                //windowing
+                int from = dataCounter - halfWindowSize;
+                int to = dataCounter + halfWindowSize;
+                for (int i = from, j = 0; i < to; i++, j++)
+                {
+                    if (i < voice.Length)
+                        windowSizedSignal[j] = voice[i] * hannWindow[j];
+                }
+
+                spectrum = DoFft(windowSizedSignal);
+
+                pVectors[vectorIndex] = GetMelSpectrum(spectrum);
+                vectorIndex++;
+
+                dataCounter += halfWindowSize;
+            }
+
+            return pVectors;
+        }
+
+        private static ParameterVector GetMelSpectrum(double[] spectrum)
+        {
+            ParameterVector pv = new ParameterVector();
+            double[] vector = new double[30];
+            for (int i = 0; i < 30; i++)
+            {
+                for (int j = FilterLimits[i, 0]; j < FilterLimits[i, 1] + 1; j++)
+                {
+                    vector[i] += spectrum[j] * MelFilter[i, j];
+                }
+            }
+            pv.SetMelSpectrum(vector);
+            return pv;
+        }
+
+        #endregion
+
         #region Mel filter data
 
         public static double[,] MelFilter = new double[30,274]{{0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.250, 0.500, 0.750, 1.000, 0.750, 0.500, 0.250, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000},
