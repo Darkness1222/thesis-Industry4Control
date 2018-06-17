@@ -15,11 +15,9 @@ namespace Industry4Control.BusinessLogic
              *  3. "small" dtw
              *  4. "big" dtw
              * */
-
-            ParameterVector[] pVectors = Helper.CreateParameterVectors(voice);
             
             // DTW
-            CustomDtw customDtw = new CustomDtw(pVectors);
+            CustomDtw customDtw = new CustomDtw(new Voice(voice));
 
             SavedData savedData = Helper.LoadSavedData();
 
@@ -29,7 +27,7 @@ namespace Industry4Control.BusinessLogic
                 {
                     if (customDtw.IsMatch(savedData.SavedFunctions[key]))
                     {
-                        return new CompareResult(true);
+                        return new CompareResult(true,key);
                     }
                 }
             }

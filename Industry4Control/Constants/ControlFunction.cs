@@ -1,7 +1,7 @@
 ﻿
 namespace Industry4Control.Constants
 {
-    public enum ControlFunction
+    internal enum ControlFunction
     {
         Function1 = 1, 
         Function2,

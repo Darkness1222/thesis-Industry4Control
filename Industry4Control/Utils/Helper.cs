@@ -36,7 +36,7 @@ namespace Industry4Control.Utils
 
         #region Serialization
 
-        public static void SaveControlVoice(ParameterVector[] pVectors, ControlFunction function)
+        public static void SaveControlVoice(short[] data, ControlFunction function)
         {
             // load the saved data if it exists
             SavedData loadedData = LoadSavedData();
@@ -46,25 +46,25 @@ namespace Industry4Control.Utils
                 if (loadedData.SavedFunctions.ContainsKey(function))
                 {
                     // Update the existing item in the dictinary
-                    loadedData.SavedFunctions[function] = pVectors;
+                    loadedData.SavedFunctions[function] = new Voice(data);
                 }
                 else
                 {
-                    loadedData.SavedFunctions.Add(function, pVectors);
+                    loadedData.SavedFunctions.Add(function, new Voice(data));
                 }
             }
             else
             {
                 // Create a completely new data
                 loadedData = new SavedData();
-                loadedData.SavedFunctions.Add(function, pVectors);
+                loadedData.SavedFunctions.Add(function, new Voice(data));
             }
 
             // save in binary format
             FileStream fileStream = new FileStream("data.bin", FileMode.OpenOrCreate, FileAccess.ReadWrite);
             BinaryFormatter binaryFormatter = new BinaryFormatter();
             binaryFormatter.Serialize(fileStream, loadedData);
-
+            fileStream.Close();
         }
 
 
@@ -77,6 +77,7 @@ namespace Industry4Control.Utils
                 FileStream fileStream = new FileStream("data.bin", FileMode.Open, FileAccess.ReadWrite);
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 savedData = binaryFormatter.Deserialize(fileStream) as SavedData;
+                fileStream.Close();
             }
 
             return savedData;
@@ -92,11 +93,20 @@ namespace Industry4Control.Utils
             double[] windowSizedSignal = new double[Parameters.WindowSize];
             double[] spectrum;
 
+            using (StreamWriter writer = new StreamWriter("voice.txt"))
+            {
+                foreach (short data in voice)
+                {
+                     writer.Write(((int)data).ToString() + "\n");
+                }
+            }
+
             ParameterVector[] pVectors = new ParameterVector[86];
 
             int dataCounter = Parameters.WindowSize / 2;
             int halfWindowSize = Parameters.WindowSize / 2;
             int vectorIndex = 0;
+            double max = 0;
 
             while (dataCounter < voice.Length)
             {
@@ -112,10 +122,36 @@ namespace Industry4Control.Utils
                 spectrum = DoFft(windowSizedSignal);
 
                 pVectors[vectorIndex] = GetMelSpectrum(spectrum);
+                double localMax = pVectors[vectorIndex].GetMax();
+                if (max < localMax)
+                {
+                    max = localMax;
+                }
+
                 vectorIndex++;
 
                 dataCounter += halfWindowSize;
             }
+
+            foreach(ParameterVector pVector in pVectors)
+            {
+                pVector.ActivateMax(max);
+            }
+
+#if DEBUG
+            using (StreamWriter writer = new StreamWriter("pVectors.txt"))
+            {
+                foreach(ParameterVector pvector in pVectors)
+                {
+                    double[] melSpectrum = pvector.GetMelSpectrum();
+                    foreach(double value in melSpectrum)
+                    {
+                        writer.Write(((int)value).ToString()+" ");
+                    }
+                    writer.Write("\n");
+                }
+            }
+#endif
 
             return pVectors;
         }

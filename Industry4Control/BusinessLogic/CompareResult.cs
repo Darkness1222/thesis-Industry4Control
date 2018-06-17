@@ -1,13 +1,14 @@
 ﻿
+using Industry4Control.Constants;
+
 namespace Industry4Control.BusinessLogic
 {
     internal class CompareResult
     {
-
-        public CompareResult(bool isMatch, int controlWordNumber = 0)
+        public CompareResult(bool isMatch, ControlFunction function = ControlFunction.Function1)
         {
             IsMatch = isMatch;
-            ControlWordNumber = controlWordNumber;
+            Function = function;
         }
 
         public bool IsMatch
@@ -16,7 +17,7 @@ namespace Industry4Control.BusinessLogic
             set;
         }
 
-        public int ControlWordNumber
+        public ControlFunction Function
         {
             get;
             set;

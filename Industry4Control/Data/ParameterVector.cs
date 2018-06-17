@@ -1,54 +1,52 @@
 ﻿
+using System;
+
 namespace Industry4Control.Data
 {
+    [Serializable]
     internal class ParameterVector
     {
-        private double[] melSpectrum;
-        private double averageValue;
+        private double[] m_MelSpectrum;
+        private double m_Sum;
 
         public ParameterVector() { }
 
         public double[] GetMelSpectrum()
         {
-            return melSpectrum;
+            return m_MelSpectrum;
         }
 
         public void SetMelSpectrum(double[] melSpectrum)
         {
-            this.melSpectrum = melSpectrum;
+            this.m_MelSpectrum = melSpectrum;
         }
 
-        public double GetAverageValue()
+        public double GetSum()
         {
-            for (int i = 0; i < melSpectrum.Length; i++)
+            for (int i = 0; i < m_MelSpectrum.Length; i++)
             {
-                averageValue += melSpectrum[i];
+                m_Sum += m_MelSpectrum[i];
             }
-            return averageValue / melSpectrum.Length;
+            return m_Sum;
         }
 
         public void ActivateMax(double max)
         {
-            for (int i = 0; i < melSpectrum.Length; i++)
+            for (int i = 0; i < m_MelSpectrum.Length; i++)
             {
-                melSpectrum[i] = (melSpectrum[i] / max) * 100;
+                m_MelSpectrum[i] = (m_MelSpectrum[i] / max) * 100;
             }
         }
 
-        private double GetMax()
+        public double GetMax()
         {
             double max = 0;
-            for (int i = 0; i < melSpectrum.Length; i++)
+            for (int i = 0; i < m_MelSpectrum.Length; i++)
             {
-                if (melSpectrum[i] > max)
-                    max = melSpectrum[i];
+                if (m_MelSpectrum[i] > max)
+                    max = m_MelSpectrum[i];
             }
             return max;
-        }
-
-        public void SetAverageValue(double averageValue)
-        {
-            this.averageValue = averageValue;
         }
     }
 }

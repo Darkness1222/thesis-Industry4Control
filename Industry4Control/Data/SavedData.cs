@@ -9,10 +9,10 @@ namespace Industry4Control.Data
     {
         public SavedData()
         {
-            SavedFunctions = new Dictionary<ControlFunction, ParameterVector[]>();
+            SavedFunctions = new Dictionary<ControlFunction, Voice>();
         }
 
-        public IDictionary<ControlFunction, ParameterVector[]> SavedFunctions
+        public IDictionary<ControlFunction, Voice> SavedFunctions
         {
             get;set;
         }

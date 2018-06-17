@@ -25,7 +25,7 @@ namespace Industry4Control.BusinessLogic
         public ControlLogic(IUiElement uiElement)
         {
             m_UIElement = uiElement;
-            m_CommunicationLogic = new CommunicationLogic(m_Port);
+            m_CommunicationLogic = new CommunicationLogic(m_UIElement, m_Port);
             m_CommunicationLogic.DataAvailable += OnDataAvailable;
             RegisterUIEvents();
         }
@@ -45,10 +45,11 @@ namespace Industry4Control.BusinessLogic
                     {
                         VoiceChecker voiceChecker = new VoiceChecker();
                         CompareResult result = voiceChecker.Compare(e.Data);
+                        m_UIElement.SetFunctionStatus(result);
                     }
                     else 
                     {
-                        Helper.SaveControlVoice(Helper.CreateParameterVectors(e.Data), (ControlFunction)e.ControlByte);
+                        Helper.SaveControlVoice(e.Data, (ControlFunction)e.ControlByte);
                     }
 
                     break;

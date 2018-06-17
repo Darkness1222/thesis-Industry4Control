@@ -1,14 +1,15 @@
-﻿using Industry4Control.EventArguments;
+﻿using Industry4Control.BusinessLogic;
+using Industry4Control.EventArguments;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Industry4Control.Interfaces
 {
-    public interface IUiElement
+    internal interface IUiElement
     {
         event EventHandler<UIActionEventArgs> UIAction;
+        
+        void SetFunctionStatus(CompareResult result);
+
+        void SetStatusMessage(string message);
     }
 }
