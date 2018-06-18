@@ -46,15 +46,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessLogic\CommunicationLogic.cs" />
+    <Compile Include="BusinessLogic\Communication\CommunicationLogic.cs" />
+    <Compile Include="BusinessLogic\Communication\MessageBase.cs" />
+    <Compile Include="BusinessLogic\Communication\OverallStatusMessage.cs" />
+    <Compile Include="BusinessLogic\Communication\ProcessStatusMessage.cs" />
     <Compile Include="BusinessLogic\ControlLogic.cs" />
     <Compile Include="BusinessLogic\CompareResult.cs" />
     <Compile Include="BusinessLogic\CustomDtw.cs" />
+    <Compile Include="Constants\MessageType.cs" />
     <Compile Include="BusinessLogic\Point.cs" />
     <Compile Include="BusinessLogic\VoiceChecker.cs" />
     <Compile Include="Constants\Limits.cs" />
     <Compile Include="Constants\Parameters.cs" />
     <Compile Include="Constants\ControlFunction.cs" />
+    <Compile Include="Constants\ProcessType.cs" />
     <Compile Include="Data\ParameterVector.cs" />
     <Compile Include="Data\SavedData.cs" />
     <Compile Include="Data\Voice.cs" />

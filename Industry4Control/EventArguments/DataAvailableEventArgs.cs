@@ -1,23 +1,21 @@
 ﻿using Industry4Control.Constants;
 using System;
+using System.Net.Sockets;
 
 namespace Industry4Control.EventArguments
 {
     internal class DataAvailableEventArgs : EventArgs
     {
-
-        public DataAvailableEventArgs(AvailableDataType type, short[] data, byte controlByte)
+        public DataAvailableEventArgs(AvailableDataType type, byte controlByte, TcpClient client, short[] data)
         {
             AvailableDataType = type;
+            ControlByte = controlByte;
+            TcpClient = client;
             Data = data;
-            ControlByte = controlByte;
         }
 
-        public DataAvailableEventArgs(AvailableDataType type, byte controlByte)
-        {
-            AvailableDataType = type;
-            ControlByte = controlByte;
-        }
+        public DataAvailableEventArgs(AvailableDataType type, byte controlByte, TcpClient client) 
+            : this(type, controlByte, client, null) { }
 
         public AvailableDataType AvailableDataType
         {
@@ -36,6 +34,11 @@ namespace Industry4Control.EventArguments
             get;
             set;
         }
-        
+
+        public TcpClient TcpClient
+        {
+            get;
+        }
+
     }
 }

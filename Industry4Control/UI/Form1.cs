@@ -36,23 +36,6 @@ namespace Industry4Control
         }
 
         #region IUiElement
-        
-        public void SetFunctionStatus(CompareResult result)
-        {
-            string statusText = result.IsMatch ? "Active" : "Inactive";
-            switch (result.Function)
-            {
-                case ControlFunction.Function1:
-                    m_function1Status.Text = statusText;
-                    break;
-                case ControlFunction.Function2:
-                    m_function2Status.Text = statusText;
-                    break;
-                case ControlFunction.Function3:
-                    m_function3Status.Text = statusText;
-                    break;
-            }
-        }
 
         public void SetStatusMessage(string message)
         {
@@ -62,6 +45,13 @@ namespace Industry4Control
             }
         }
 
-        #endregion 
+        public void RefreshUI()
+        {
+            m_function1Status.Text = m_ControlLogic.Function1Status ? "Active" : "Inactive";
+            m_function2Status.Text = m_ControlLogic.Function2Status ? "Active" : "Inactive";
+            m_function3Status.Text = m_ControlLogic.Function3Status ? "Active" : "Inactive";
+        }
+
+        #endregion
     }
 }

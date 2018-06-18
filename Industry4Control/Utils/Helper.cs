@@ -36,35 +36,43 @@ namespace Industry4Control.Utils
 
         #region Serialization
 
-        public static void SaveControlVoice(short[] data, ControlFunction function)
+        public static bool SaveControlVoice(short[] data, ControlFunction function)
         {
-            // load the saved data if it exists
-            SavedData loadedData = LoadSavedData();
-            if(loadedData != null)
+            try
             {
-                // Extend the already saved data
-                if (loadedData.SavedFunctions.ContainsKey(function))
+                // load the saved data if it exists
+                SavedData loadedData = LoadSavedData();
+                if (loadedData != null)
                 {
-                    // Update the existing item in the dictinary
-                    loadedData.SavedFunctions[function] = new Voice(data);
+                    // Extend the already saved data
+                    if (loadedData.SavedFunctions.ContainsKey(function))
+                    {
+                        // Update the existing item in the dictinary
+                        loadedData.SavedFunctions[function] = new Voice(data);
+                    }
+                    else
+                    {
+                        loadedData.SavedFunctions.Add(function, new Voice(data));
+                    }
                 }
                 else
                 {
+                    // Create a completely new data
+                    loadedData = new SavedData();
                     loadedData.SavedFunctions.Add(function, new Voice(data));
                 }
-            }
-            else
+
+                // save in binary format
+                FileStream fileStream = new FileStream("data.bin", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                binaryFormatter.Serialize(fileStream, loadedData);
+                fileStream.Close();
+            }catch(Exception e)
             {
-                // Create a completely new data
-                loadedData = new SavedData();
-                loadedData.SavedFunctions.Add(function, new Voice(data));
+                return false;
             }
 
-            // save in binary format
-            FileStream fileStream = new FileStream("data.bin", FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-            binaryFormatter.Serialize(fileStream, loadedData);
-            fileStream.Close();
+            return true;
         }
 
 

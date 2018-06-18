@@ -7,8 +7,8 @@ namespace Industry4Control.Interfaces
     internal interface IUiElement
     {
         event EventHandler<UIActionEventArgs> UIAction;
-        
-        void SetFunctionStatus(CompareResult result);
+
+        void RefreshUI();
 
         void SetStatusMessage(string message);
     }

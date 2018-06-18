@@ -5,7 +5,7 @@ namespace Industry4Control.BusinessLogic
 {
     internal class CompareResult
     {
-        public CompareResult(bool isMatch, ControlFunction function = ControlFunction.Function1)
+        public CompareResult(bool isMatch, ControlFunction function = ControlFunction.None)
         {
             IsMatch = isMatch;
             Function = function;

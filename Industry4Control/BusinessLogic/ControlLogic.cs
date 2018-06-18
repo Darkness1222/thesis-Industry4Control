@@ -1,6 +1,7 @@
 ﻿using Industry4Control.Interfaces;
 using Industry4Control.Constants;
 using Industry4Control.Utils;
+using Industry4Control.BusinessLogic.Communication;
 
 namespace Industry4Control.BusinessLogic
 {
@@ -18,6 +19,16 @@ namespace Industry4Control.BusinessLogic
         private IUiElement m_UIElement;
         private bool isServerRunning;
 
+        private bool m_Function1Status;
+
+        #endregion
+
+        #region Public fields
+
+        public bool Function1Status { get; private set; }
+        public bool Function3Status { get; private set; }
+        public bool Function2Status { get; private set; }
+        
         #endregion
 
         #region Constructors
@@ -35,21 +46,59 @@ namespace Industry4Control.BusinessLogic
             switch (e.AvailableDataType)
             {
                 case AvailableDataType.Command:
-
+                    bool activation = (e.ControlByte & 0x4) > 0;
+                    if (!activation)
+                    {
+                        // Deactivation is not possible via commands
+                        break;
+                    }
+                    switch (e.ControlByte & 0x3)
+                    {
+                        case 0:
+                            Function1Status = true;
+                            break;
+                        case 1:
+                            Function2Status = true;
+                            break;
+                        case 2:
+                            Function3Status = true;
+                            break;
+                    }
+                    m_UIElement.RefreshUI();
                     break;
                 case AvailableDataType.Request:
-
+                    if(e.ControlByte == 0x1)
+                    {
+                        OverallStatusMessage message = new OverallStatusMessage(Function1Status, Function2Status, Function3Status);
+                        m_CommunicationLogic.Send(message, e.TcpClient);
+                    }
                     break;
                 case AvailableDataType.Voice:
                     if(e.ControlByte == 0x0)
                     {
                         VoiceChecker voiceChecker = new VoiceChecker();
                         CompareResult result = voiceChecker.Compare(e.Data);
-                        m_UIElement.SetFunctionStatus(result);
+                        switch (result.Function)
+                        {
+                            case ControlFunction.Function1:
+                                Function1Status = result.IsMatch;
+                                break;
+                            case ControlFunction.Function2:
+                                Function2Status = result.IsMatch;
+                                break;
+                            case ControlFunction.Function3:
+                                Function3Status = result.IsMatch;
+                                break;
+                        }
+                        m_UIElement.RefreshUI();
+                        ProcessStatusMessage message = new ProcessStatusMessage(result.IsMatch, ProcessType.Control);
+                        m_CommunicationLogic.Send(message, e.TcpClient);
                     }
                     else 
                     {
-                        Helper.SaveControlVoice(e.Data, (ControlFunction)e.ControlByte);
+                        bool saved = Helper.SaveControlVoice(e.Data, (ControlFunction)e.ControlByte);
+                        ProcessStatusMessage message = new ProcessStatusMessage(saved, ProcessType.Save);
+                        m_CommunicationLogic.Send(message, e.TcpClient);
                     }
 
                     break;
