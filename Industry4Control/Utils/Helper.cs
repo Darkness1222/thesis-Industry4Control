@@ -36,6 +36,67 @@ namespace Industry4Control.Utils
 
         #region Serialization
 
+        public static bool DeleteVoice(ControlFunction function)
+        {
+            SavedData savedData = Helper.LoadSavedData();
+            if (savedData?.SavedFunctions?.ContainsKey(function) ?? false)
+            {
+                savedData.SavedFunctions.Remove(function);
+
+                // Saving the data in binary format
+                FileStream fileStream = new FileStream("data.bin", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                binaryFormatter.Serialize(fileStream, savedData);
+                fileStream.Close();
+
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public static bool SaveFunctionStatus(bool status, ControlFunction function)
+        {
+            try
+            {
+                // load the saved data if it exists
+                SavedData loadedData = LoadSavedData();
+                if (loadedData != null)
+                {
+                    // Extend the already saved data
+                    if (loadedData.FunctionStatus.ContainsKey(function))
+                    {
+                        // Update the existing item in the dictinary
+                        loadedData.FunctionStatus[function] = status;
+                    }
+                    else
+                    {
+                        loadedData.FunctionStatus.Add(function, status);
+                    }
+                }
+                else
+                {
+                    // Create a completely new data
+                    loadedData = new SavedData();
+                    loadedData.FunctionStatus.Add(function, status);
+                }
+
+                // save in binary format
+                FileStream fileStream = new FileStream("data.bin", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                binaryFormatter.Serialize(fileStream, loadedData);
+                fileStream.Close();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+
         public static bool SaveControlVoice(short[] data, ControlFunction function)
         {
             try

@@ -49,6 +49,14 @@
             this.m_function1Status = new System.Windows.Forms.Label();
             this.m_function2Status = new System.Windows.Forms.Label();
             this.m_function3Status = new System.Windows.Forms.Label();
+            this.staticLabel_status = new System.Windows.Forms.Label();
+            this.staticLabel_learned = new System.Windows.Forms.Label();
+            this.lb_Function1_learned = new System.Windows.Forms.Label();
+            this.lb_Function2_learned = new System.Windows.Forms.Label();
+            this.lb_Function3_learned = new System.Windows.Forms.Label();
+            this.btn_clearFunction1 = new System.Windows.Forms.Button();
+            this.btn_clearFunction2 = new System.Windows.Forms.Button();
+            this.btn_clearFunction3 = new System.Windows.Forms.Button();
             this.gb_ServerControls.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -108,7 +116,7 @@
             // 
             this.lb_function1Name.AutoSize = true;
             this.lb_function1Name.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_function1Name.Location = new System.Drawing.Point(13, 13);
+            this.lb_function1Name.Location = new System.Drawing.Point(12, 40);
             this.lb_function1Name.Name = "lb_function1Name";
             this.lb_function1Name.Size = new System.Drawing.Size(71, 13);
             this.lb_function1Name.TabIndex = 5;
@@ -118,7 +126,7 @@
             // 
             this.lb_function2Name.AutoSize = true;
             this.lb_function2Name.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_function2Name.Location = new System.Drawing.Point(13, 34);
+            this.lb_function2Name.Location = new System.Drawing.Point(12, 61);
             this.lb_function2Name.Name = "lb_function2Name";
             this.lb_function2Name.Size = new System.Drawing.Size(71, 13);
             this.lb_function2Name.TabIndex = 6;
@@ -128,7 +136,7 @@
             // 
             this.lb_function3Name.AutoSize = true;
             this.lb_function3Name.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_function3Name.Location = new System.Drawing.Point(13, 56);
+            this.lb_function3Name.Location = new System.Drawing.Point(12, 83);
             this.lb_function3Name.Name = "lb_function3Name";
             this.lb_function3Name.Size = new System.Drawing.Size(71, 13);
             this.lb_function3Name.TabIndex = 7;
@@ -137,7 +145,8 @@
             // m_function1Status
             // 
             this.m_function1Status.AutoSize = true;
-            this.m_function1Status.Location = new System.Drawing.Point(90, 13);
+            this.m_function1Status.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_function1Status.Location = new System.Drawing.Point(89, 40);
             this.m_function1Status.Name = "m_function1Status";
             this.m_function1Status.Size = new System.Drawing.Size(45, 13);
             this.m_function1Status.TabIndex = 9;
@@ -146,7 +155,7 @@
             // m_function2Status
             // 
             this.m_function2Status.AutoSize = true;
-            this.m_function2Status.Location = new System.Drawing.Point(90, 34);
+            this.m_function2Status.Location = new System.Drawing.Point(89, 61);
             this.m_function2Status.Name = "m_function2Status";
             this.m_function2Status.Size = new System.Drawing.Size(45, 13);
             this.m_function2Status.TabIndex = 10;
@@ -155,17 +164,102 @@
             // m_function3Status
             // 
             this.m_function3Status.AutoSize = true;
-            this.m_function3Status.Location = new System.Drawing.Point(90, 56);
+            this.m_function3Status.Location = new System.Drawing.Point(89, 83);
             this.m_function3Status.Name = "m_function3Status";
             this.m_function3Status.Size = new System.Drawing.Size(45, 13);
             this.m_function3Status.TabIndex = 11;
             this.m_function3Status.Text = "Inactive";
+            // 
+            // staticLabel_status
+            // 
+            this.staticLabel_status.AutoSize = true;
+            this.staticLabel_status.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.staticLabel_status.Location = new System.Drawing.Point(89, 18);
+            this.staticLabel_status.Name = "staticLabel_status";
+            this.staticLabel_status.Size = new System.Drawing.Size(43, 13);
+            this.staticLabel_status.TabIndex = 12;
+            this.staticLabel_status.Text = "Status";
+            // 
+            // staticLabel_learned
+            // 
+            this.staticLabel_learned.AutoSize = true;
+            this.staticLabel_learned.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.staticLabel_learned.Location = new System.Drawing.Point(147, 18);
+            this.staticLabel_learned.Name = "staticLabel_learned";
+            this.staticLabel_learned.Size = new System.Drawing.Size(53, 13);
+            this.staticLabel_learned.TabIndex = 13;
+            this.staticLabel_learned.Text = "Learned";
+            // 
+            // lb_Function1_learned
+            // 
+            this.lb_Function1_learned.AutoSize = true;
+            this.lb_Function1_learned.Location = new System.Drawing.Point(147, 40);
+            this.lb_Function1_learned.Name = "lb_Function1_learned";
+            this.lb_Function1_learned.Size = new System.Drawing.Size(35, 13);
+            this.lb_Function1_learned.TabIndex = 14;
+            this.lb_Function1_learned.Text = "label1";
+            // 
+            // lb_Function2_learned
+            // 
+            this.lb_Function2_learned.AutoSize = true;
+            this.lb_Function2_learned.Location = new System.Drawing.Point(147, 61);
+            this.lb_Function2_learned.Name = "lb_Function2_learned";
+            this.lb_Function2_learned.Size = new System.Drawing.Size(35, 13);
+            this.lb_Function2_learned.TabIndex = 15;
+            this.lb_Function2_learned.Text = "label1";
+            // 
+            // lb_Function3_learned
+            // 
+            this.lb_Function3_learned.AutoSize = true;
+            this.lb_Function3_learned.Location = new System.Drawing.Point(147, 83);
+            this.lb_Function3_learned.Name = "lb_Function3_learned";
+            this.lb_Function3_learned.Size = new System.Drawing.Size(35, 13);
+            this.lb_Function3_learned.TabIndex = 16;
+            this.lb_Function3_learned.Text = "label1";
+            // 
+            // btn_clearFunction1
+            // 
+            this.btn_clearFunction1.Location = new System.Drawing.Point(203, 35);
+            this.btn_clearFunction1.Name = "btn_clearFunction1";
+            this.btn_clearFunction1.Size = new System.Drawing.Size(57, 23);
+            this.btn_clearFunction1.TabIndex = 17;
+            this.btn_clearFunction1.Text = "Clear";
+            this.btn_clearFunction1.UseVisualStyleBackColor = true;
+            this.btn_clearFunction1.Click += new System.EventHandler(this.btn_clearFunction1_Click);
+            // 
+            // btn_clearFunction2
+            // 
+            this.btn_clearFunction2.Location = new System.Drawing.Point(203, 56);
+            this.btn_clearFunction2.Name = "btn_clearFunction2";
+            this.btn_clearFunction2.Size = new System.Drawing.Size(57, 23);
+            this.btn_clearFunction2.TabIndex = 18;
+            this.btn_clearFunction2.Text = "Clear";
+            this.btn_clearFunction2.UseVisualStyleBackColor = true;
+            this.btn_clearFunction2.Click += new System.EventHandler(this.btn_clearFunction2_Click);
+            // 
+            // btn_clearFunction3
+            // 
+            this.btn_clearFunction3.Location = new System.Drawing.Point(203, 78);
+            this.btn_clearFunction3.Name = "btn_clearFunction3";
+            this.btn_clearFunction3.Size = new System.Drawing.Size(57, 23);
+            this.btn_clearFunction3.TabIndex = 19;
+            this.btn_clearFunction3.Text = "Clear";
+            this.btn_clearFunction3.UseVisualStyleBackColor = true;
+            this.btn_clearFunction3.Click += new System.EventHandler(this.btn_clearFunction3_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 235);
+            this.Controls.Add(this.btn_clearFunction3);
+            this.Controls.Add(this.btn_clearFunction2);
+            this.Controls.Add(this.btn_clearFunction1);
+            this.Controls.Add(this.lb_Function3_learned);
+            this.Controls.Add(this.lb_Function2_learned);
+            this.Controls.Add(this.lb_Function1_learned);
+            this.Controls.Add(this.staticLabel_learned);
+            this.Controls.Add(this.staticLabel_status);
             this.Controls.Add(this.m_function3Status);
             this.Controls.Add(this.m_function2Status);
             this.Controls.Add(this.m_function1Status);
@@ -195,6 +289,14 @@
         private System.Windows.Forms.Label m_function1Status;
         private System.Windows.Forms.Label m_function2Status;
         private System.Windows.Forms.Label m_function3Status;
+        private System.Windows.Forms.Label staticLabel_status;
+        private System.Windows.Forms.Label staticLabel_learned;
+        private System.Windows.Forms.Label lb_Function1_learned;
+        private System.Windows.Forms.Label lb_Function2_learned;
+        private System.Windows.Forms.Label lb_Function3_learned;
+        private System.Windows.Forms.Button btn_clearFunction1;
+        private System.Windows.Forms.Button btn_clearFunction2;
+        private System.Windows.Forms.Button btn_clearFunction3;
     }
 }
 

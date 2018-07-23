@@ -23,11 +23,17 @@ namespace Industry4Control.BusinessLogic
             int lowerIndex = (m_Voice.LowerMostIndex < voice.LowerMostIndex) ? m_Voice.LowerMostIndex : voice.LowerMostIndex;
             int upperIndex = (m_Voice.UpperMostIndex > voice.UpperMostIndex) ? m_Voice.UpperMostIndex : voice.UpperMostIndex;
 
-            if (Math.Abs(voice.Length - m_Voice.Length) > 15)
+            int diff = Math.Abs(voice.Length - m_Voice.Length);
+
+            if (diff > 15)
+            {
                 return false;
+            }
 
             if (upperIndex < lowerIndex)
+            {
                 return false;
+            }
 
             double[,] dtwResultMatrix = new double[upperIndex - lowerIndex, upperIndex - lowerIndex];
 
@@ -57,7 +63,7 @@ namespace Industry4Control.BusinessLogic
 
             double result = RunBigDTW(dtwResultMatrix);
 
-            if(result < Limits.DtwLimit)
+            if(result < Limits.GetLimit(upperIndex - lowerIndex))
             {
                 return true;
             }

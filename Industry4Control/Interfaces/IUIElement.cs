@@ -8,7 +8,7 @@ namespace Industry4Control.Interfaces
     {
         event EventHandler<UIActionEventArgs> UIAction;
 
-        void RefreshUI();
+        void RefreshFunctionStatus();
 
         void SetStatusMessage(string message);
     }

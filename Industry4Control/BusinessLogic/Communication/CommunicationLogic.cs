@@ -60,7 +60,9 @@ namespace Industry4Control.BusinessLogic.Communication
             {
                 m_Listening = false;
                 m_TcpListener.Stop();
+                m_TcpListener = null;
                 m_ListenerThread.Join();
+                m_ListenerThread = null;
                 m_Ui.SetStatusMessage("Stopped");
             }
         }
@@ -68,7 +70,7 @@ namespace Industry4Control.BusinessLogic.Communication
         public void Send(MessageBase message, TcpClient client)
         {
             NetworkStream stream = client.GetStream();
-
+            
             switch (message.MessageType)
             {
                 case MessageType.OverallStatus:
@@ -77,10 +79,10 @@ namespace Industry4Control.BusinessLogic.Communication
                     {
                         byte[] bytes = new byte[2];
                         bytes[0] = 0xD;
-                        bytes[1] = (byte)((overallStatus.Function3 ? 1:0 << 2) | 
-                            (overallStatus.Function2 ? 1:0 << 1) | 
-                            (overallStatus.Function1 ? 1:0));
-
+                        bytes[1] |= (byte)((overallStatus.Function3 ? 1 : 0) << 2);
+                        bytes[1] |= (byte)((overallStatus.Function2 ? 1 : 0) << 1);
+                        bytes[1] |= (byte)((overallStatus.Function1 ? 1 : 0 ));
+  
                         stream.Write(bytes, 0, 2);
                     }
                     break;
@@ -90,7 +92,8 @@ namespace Industry4Control.BusinessLogic.Communication
                     {
                         byte[] bytes = new byte[2];
                         bytes[0] = 0xE;
-                        bytes[1] = (byte)((processStatus.Process ? 1 : 0 << 1) | (processStatus.Status ? 1:0));
+                        bytes[1] = (byte)((processStatus.ProcessType == ProcessType.Save ? 1 : 0 << 1) 
+                            | (processStatus.Status ? 1:0));
                         
                         stream.Write(bytes, 0, 2);
                     }

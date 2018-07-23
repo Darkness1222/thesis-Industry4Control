@@ -17,5 +17,10 @@ namespace Industry4Control.Data
             get;set;
         }
 
+        public IDictionary<ControlFunction, bool> FunctionStatus
+        {
+            get;set;
+        }
+
     }
 }
