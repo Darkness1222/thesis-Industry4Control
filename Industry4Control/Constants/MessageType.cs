@@ -3,6 +3,7 @@
     internal enum MessageType
     {
         OverallStatus,
-        ProcessStatus
+        ProcessStatus,
+        PLCControl
     }
 }

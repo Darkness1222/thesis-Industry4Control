@@ -11,7 +11,8 @@ namespace Industry4Control.BusinessLogic.Communication
     {
         #region Private fields
 
-        private readonly int m_Port;
+        private readonly int m_ControlPort;
+        private readonly int m_PlcPort;
         private TcpListener m_TcpListener;
         private Thread m_ListenerThread;
         private bool m_Listening;
@@ -27,9 +28,10 @@ namespace Industry4Control.BusinessLogic.Communication
 
         #region Constructors
 
-        public CommunicationLogic(IUiElement ui, int port)
+        public CommunicationLogic(IUiElement ui, int controlPort, int plcPort)
         {
-            m_Port = 50005;
+            m_ControlPort = controlPort;
+            m_PlcPort = plcPort;
             m_Listening = false;
             m_Ui = ui;
         }
@@ -43,7 +45,7 @@ namespace Industry4Control.BusinessLogic.Communication
             if (!m_Listening)
             {
 #pragma warning disable CS0618 // Type or member is obsolete
-                m_TcpListener = new TcpListener(m_Port);
+                m_TcpListener = new TcpListener(m_ControlPort);
 #pragma warning restore CS0618 // Type or member is obsolete
                 m_ListenerThread = new Thread(ExecuteInBackground);
                 m_Listening = true;
@@ -99,6 +101,17 @@ namespace Industry4Control.BusinessLogic.Communication
                     }
                     break;
             }
+        }
+
+        public void SendToPLC(string ipAddress, PLCControlMessage message)
+        {
+            TcpClient client = new TcpClient(ipAddress, m_PlcPort);
+            NetworkStream stream = client.GetStream();
+            byte[] bytes = new byte[2];
+            bytes[0] = (byte)message.Function;
+            bytes[1] = message.Value ? (byte)1 : (byte)0;
+
+            stream.Write(bytes, 0, 2);
         }
 
         #endregion
@@ -165,15 +178,17 @@ namespace Industry4Control.BusinessLogic.Communication
             }
 
             // receive the second part of the data (~10kb)
+            dataInBytes = new byte[22050]; // to be clear the array
             client = m_TcpListener.AcceptTcpClient();
+            client.ReceiveBufferSize = 22050;
             networkStream = client.GetStream();
             networkStream.Read(dataInBytes, 0, dataInBytes.Length);
 
-            for (int i = 0, j= dataInBytes.Length; i < dataInBytes.Length; i += 2, j+=2)
+            for (int i = 0, j= dataInBytes.Length; i < dataInBytes.Length; i += 2, j += 2)
             {
                 dataInShort[j / 2] = (short)(dataInBytes[i] | dataInBytes[i + 1] << 8);
             }
-
+            
             DataAvailable?.Invoke(this, new DataAvailableEventArgs(AvailableDataType.Voice, control, client, dataInShort));
         }
 

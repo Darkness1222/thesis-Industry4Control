@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Industry4Control", "Industry4Control\Industry4Control.csproj", "{84EE48ED-F2D6-4C3D-8DBD-553F0626691F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceRecognitionTester", "VoiceRecognitionTester\VoiceRecognitionTester.csproj", "{B9FDEEF3-9041-4725-A6AC-43EEE6CDD1CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{84EE48ED-F2D6-4C3D-8DBD-553F0626691F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84EE48ED-F2D6-4C3D-8DBD-553F0626691F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84EE48ED-F2D6-4C3D-8DBD-553F0626691F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9FDEEF3-9041-4725-A6AC-43EEE6CDD1CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9FDEEF3-9041-4725-A6AC-43EEE6CDD1CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9FDEEF3-9041-4725-A6AC-43EEE6CDD1CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9FDEEF3-9041-4725-A6AC-43EEE6CDD1CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

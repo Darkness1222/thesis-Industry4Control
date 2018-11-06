@@ -10,6 +10,7 @@ namespace Industry4Control.Data
         public SavedData()
         {
             SavedFunctions = new Dictionary<ControlFunction, Voice>();
+            FunctionStatus = new Dictionary<ControlFunction, bool>();
         }
 
         public IDictionary<ControlFunction, Voice> SavedFunctions

@@ -57,7 +57,12 @@
             this.btn_clearFunction1 = new System.Windows.Forms.Button();
             this.btn_clearFunction2 = new System.Windows.Forms.Button();
             this.btn_clearFunction3 = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btn_plctest = new System.Windows.Forms.Button();
+            this.tb_plcIpAddress = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.gb_ServerControls.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_startServerButton
@@ -247,11 +252,49 @@
             this.btn_clearFunction3.UseVisualStyleBackColor = true;
             this.btn_clearFunction3.Click += new System.EventHandler(this.btn_clearFunction3_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btn_plctest);
+            this.groupBox1.Controls.Add(this.tb_plcIpAddress);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Location = new System.Drawing.Point(287, 24);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(206, 204);
+            this.groupBox1.TabIndex = 20;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "PLC control";
+            // 
+            // btn_plctest
+            // 
+            this.btn_plctest.Location = new System.Drawing.Point(125, 171);
+            this.btn_plctest.Name = "btn_plctest";
+            this.btn_plctest.Size = new System.Drawing.Size(75, 23);
+            this.btn_plctest.TabIndex = 2;
+            this.btn_plctest.Text = "test";
+            this.btn_plctest.UseVisualStyleBackColor = true;
+            // 
+            // tb_plcIpAddress
+            // 
+            this.tb_plcIpAddress.Location = new System.Drawing.Point(72, 29);
+            this.tb_plcIpAddress.Name = "tb_plcIpAddress";
+            this.tb_plcIpAddress.Size = new System.Drawing.Size(128, 20);
+            this.tb_plcIpAddress.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 32);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(60, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "IP address:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 235);
+            this.ClientSize = new System.Drawing.Size(502, 235);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btn_clearFunction3);
             this.Controls.Add(this.btn_clearFunction2);
             this.Controls.Add(this.btn_clearFunction1);
@@ -271,6 +314,8 @@
             this.Text = "Server";
             this.gb_ServerControls.ResumeLayout(false);
             this.gb_ServerControls.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -297,6 +342,10 @@
         private System.Windows.Forms.Button btn_clearFunction1;
         private System.Windows.Forms.Button btn_clearFunction2;
         private System.Windows.Forms.Button btn_clearFunction3;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btn_plctest;
+        private System.Windows.Forms.TextBox tb_plcIpAddress;
+        private System.Windows.Forms.Label label1;
     }
 }
 

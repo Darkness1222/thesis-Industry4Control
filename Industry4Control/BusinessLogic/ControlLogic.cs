@@ -8,12 +8,6 @@ namespace Industry4Control.BusinessLogic
 {
     internal class ControlLogic
     {
-        #region Const fields
-
-        private const int m_Port = 50005;
-
-        #endregion
-
         #region Private fields
 
         private CommunicationLogic m_CommunicationLogic;
@@ -145,7 +139,7 @@ namespace Industry4Control.BusinessLogic
         public ControlLogic(IUiElement uiElement)
         {
             m_UIElement = uiElement;
-            m_CommunicationLogic = new CommunicationLogic(m_UIElement, m_Port);
+            m_CommunicationLogic = new CommunicationLogic(m_UIElement, Ports.PhonePort, Ports.PlcPort);
             m_CommunicationLogic.DataAvailable += OnDataAvailable;
             RegisterUIEvents();
         }
@@ -165,12 +159,15 @@ namespace Industry4Control.BusinessLogic
                     {
                         case 1:
                             Function1Status = true;
+                            //m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function1, true));
                             break;
                         case 2:
                             Function2Status = true;
+                            //m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function2, true));
                             break;
                         case 3:
                             Function3Status = true;
+                            //m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function3, true));
                             break;
                     }
                     m_UIElement.RefreshFunctionStatus();
@@ -191,12 +188,15 @@ namespace Industry4Control.BusinessLogic
                         {
                             case ControlFunction.Function1:
                                 Function1Status = !result.IsMatch;
+                                //m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function1, Function1Status));
                                 break;
                             case ControlFunction.Function2:
                                 Function2Status = !result.IsMatch;
+                                //m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function2, Function2Status));
                                 break;
                             case ControlFunction.Function3:
                                 Function3Status = !result.IsMatch;
+                                //m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function3, Function3Status));
                                 break;
                         }
                         m_UIElement.RefreshFunctionStatus();
@@ -208,6 +208,7 @@ namespace Industry4Control.BusinessLogic
                         bool saved = Helper.SaveControlVoice(e.Data, (ControlFunction)e.ControlByte);
                         ProcessStatusMessage message = new ProcessStatusMessage(saved, ProcessType.Save);
                         m_CommunicationLogic.Send(message, e.TcpClient);
+                        m_UIElement.RefreshFunctionStatus();
                     }
 
                     break;

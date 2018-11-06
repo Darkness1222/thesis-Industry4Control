@@ -3,6 +3,7 @@ using Industry4Control.Constants;
 using Industry4Control.Data;
 using System;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -158,7 +159,7 @@ namespace Industry4Control.Utils
 
         public static ParameterVector[] CreateParameterVectors(short[] voice)
         {
-            double[] hannWindow = Helper.GetHannWindow(Parameters.WindowSize);
+            double[] hannWindow = GetHannWindow(Parameters.WindowSize);
             double[] windowSizedSignal = new double[Parameters.WindowSize];
             double[] spectrum;
 
@@ -189,14 +190,15 @@ namespace Industry4Control.Utils
                 }
 
                 spectrum = DoFft(windowSizedSignal);
-
+                
                 pVectors[vectorIndex] = GetMelSpectrum(spectrum);
+               // pVectors[vectorIndex].SetMelSpectrum(RemoveGlitches(pVectors[vectorIndex].GetMelSpectrum()));
                 double localMax = pVectors[vectorIndex].GetMax();
                 if (max < localMax)
                 {
                     max = localMax;
                 }
-
+                
                 vectorIndex++;
 
                 dataCounter += halfWindowSize;
@@ -204,7 +206,7 @@ namespace Industry4Control.Utils
 
             foreach(ParameterVector pVector in pVectors)
             {
-                pVector.ActivateMax(max);
+               pVector.ActivateMax(max);
             }
 
 #if DEBUG
@@ -212,8 +214,8 @@ namespace Industry4Control.Utils
             {
                 foreach(ParameterVector pvector in pVectors)
                 {
-                    double[] melSpectrum = pvector.GetMelSpectrum();
-                    foreach(double value in melSpectrum)
+                    short[] melSpectrum = pvector.GetMelSpectrum();
+                    foreach(short value in melSpectrum)
                     {
                         writer.Write(((int)value).ToString()+" ");
                     }
@@ -221,19 +223,63 @@ namespace Industry4Control.Utils
                 }
             }
 #endif
-
             return pVectors;
         }
+
+
+
+        public static double[] RemoveGlitches(double[] spectrum)
+        {
+            double max = 0, max2 = 0;
+            double posAvg = 0;
+            double posSum = 0;
+            
+            foreach(double value in spectrum)
+            {
+                if (value > max)
+                {
+                    max = value;
+                }
+            }
+
+            foreach (double value in spectrum)
+            {
+                if (value > max2 && value != max)
+                {
+                    max2 = value;
+                }
+            }
+
+            posSum = spectrum.Sum();
+
+            posAvg = posSum / spectrum.Length;
+
+            double[] filtered = new double[spectrum.Length];
+
+            if(max2 - max > 30)
+            {
+                for (int i = 0; i < spectrum.Length; i++)
+                {
+                    if (spectrum[i] > max2)
+                    {
+                        spectrum[i] = max2;
+                    }
+                }
+            }
+
+            return spectrum;
+        }
+ 
 
         private static ParameterVector GetMelSpectrum(double[] spectrum)
         {
             ParameterVector pv = new ParameterVector();
-            double[] vector = new double[30];
+            short[] vector = new short[30];
             for (int i = 0; i < 30; i++)
             {
                 for (int j = FilterLimits[i, 0]; j < FilterLimits[i, 1] + 1; j++)
                 {
-                    vector[i] += spectrum[j] * MelFilter[i, j];
+                    vector[i] += (short)(spectrum[j] * MelFilter[i, j]);
                 }
             }
             pv.SetMelSpectrum(vector);

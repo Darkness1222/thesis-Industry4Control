@@ -1,0 +1,11 @@
+E:\Egyetem\I\Diplomamunka\C#\Industry4Control\VoiceRecognitionTester\obj\Debug\VoiceRecognitionTester.csproj.CoreCompileInputs.cache
+E:\Egyetem\I\Diplomamunka\C#\Industry4Control\VoiceRecognitionTester\obj\Debug\VoiceRecognitionTester.csprojAssemblyReference.cache
+E:\Egyetem\I\Diplomamunka\C#\Industry4Control\VoiceRecognitionTester\bin\Debug\VoiceRecognitionTester.exe.config
+E:\Egyetem\I\Diplomamunka\C#\Industry4Control\VoiceRecognitionTester\bin\Debug\VoiceRecognitionTester.exe
+E:\Egyetem\I\Diplomamunka\C#\Industry4Control\VoiceRecognitionTester\bin\Debug\VoiceRecognitionTester.pdb
+E:\Egyetem\I\Diplomamunka\C#\Industry4Control\VoiceRecognitionTester\bin\Debug\Industry4Control.exe
+E:\Egyetem\I\Diplomamunka\C#\Industry4Control\VoiceRecognitionTester\bin\Debug\Industry4Control.pdb
+E:\Egyetem\I\Diplomamunka\C#\Industry4Control\VoiceRecognitionTester\bin\Debug\Industry4Control.exe.config
+E:\Egyetem\I\Diplomamunka\C#\Industry4Control\VoiceRecognitionTester\obj\Debug\VoiceRecognitionTester.csproj.CopyComplete
+E:\Egyetem\I\Diplomamunka\C#\Industry4Control\VoiceRecognitionTester\obj\Debug\VoiceRecognitionTester.exe
+E:\Egyetem\I\Diplomamunka\C#\Industry4Control\VoiceRecognitionTester\obj\Debug\VoiceRecognitionTester.pdb

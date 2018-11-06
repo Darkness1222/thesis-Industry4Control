@@ -1,5 +1,4 @@
-﻿
-using Industry4Control.Constants;
+﻿using Industry4Control.Constants;
 
 namespace Industry4Control.BusinessLogic
 {

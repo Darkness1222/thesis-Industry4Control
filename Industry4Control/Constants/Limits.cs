@@ -3,36 +3,28 @@ namespace Industry4Control.Constants
 {
     internal static class Limits
     {
-        public static double VoiceAmplitudeLimit = 20;
+        public static double VoiceAmplitudeLimit = 15;
 
         public static double GetLimit(double length)
         {
             if(length < 20)
             {
-                return 200;
+                return 10000;
             }
-            if (length < 30)
+            if (length < 32)
             {
-                return 500;
+                return 20000;
             }
             if (length < 40)
             {
-                return 800;
+                return 25000;
             }
             if (length < 50)
             {
-                return 1200;
-            }
-            if (length < 60)
-            {
-                return 1800;
-            }
-            if (length < 70)
-            {
-                return 2500;
+                return 30000;
             }
 
-            return 10000;
+            return 1000000;
         }
     }
 }

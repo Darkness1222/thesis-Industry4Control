@@ -8,6 +8,8 @@ namespace Industry4Control.Interfaces
     {
         event EventHandler<UIActionEventArgs> UIAction;
 
+        string PlcAddress { get; }
+
         void RefreshFunctionStatus();
 
         void SetStatusMessage(string message);

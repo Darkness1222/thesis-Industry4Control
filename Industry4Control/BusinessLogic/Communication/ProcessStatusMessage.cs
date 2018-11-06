@@ -6,7 +6,7 @@ namespace Industry4Control.BusinessLogic.Communication
     {
         public bool Status;
 
-        public ProcessType ProcessType; // false - control, true - save
+        public ProcessType ProcessType; 
 
         public ProcessStatusMessage(bool status, ProcessType type) : base(MessageType.ProcessStatus)
         {

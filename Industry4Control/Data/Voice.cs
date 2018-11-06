@@ -1,6 +1,8 @@
 ﻿using Industry4Control.Utils;
 using Industry4Control.Constants;
 using System;
+using System.Media;
+using System.IO;
 
 namespace Industry4Control.Data
 {
@@ -21,6 +23,13 @@ namespace Industry4Control.Data
 
         public Voice(short[] voice)
         {
+            /*byte[] byteArray = new byte[voice.Length * 2];
+            Buffer.BlockCopy(voice, 0, byteArray, 0, byteArray.Length);
+
+            SoundPlayer player = new SoundPlayer(new MemoryStream(byteArray));
+
+            player.Play();*/
+
             ParameterVectors = Helper.CreateParameterVectors(voice);
             for(int i = 0; i < ParameterVectors.Length; i++)
             {
