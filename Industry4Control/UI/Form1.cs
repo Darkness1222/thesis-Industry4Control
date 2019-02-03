@@ -25,12 +25,14 @@ namespace Industry4Control
             m_stopServerButton.Click += M_stopServerButton_Click;
             m_ControlLogic = new ControlLogic(this);
 
+            Console.WriteLine("Test_____________________________________testEnd");
+
             InitializeFunctionStatus();
 
 
             // ONly for testing prarameter vector creation method
 
-            /*short[] voice = new short[22050];
+            short[] voice = new short[22050];
             using(StreamReader reader = new StreamReader("voice.txt"))
             {
                 for(int i = 0; i < 22050; i++)
@@ -39,7 +41,9 @@ namespace Industry4Control
                 }
             }
 
-            Helper.CreateParameterVectors(voice);*/
+            VoiceChecker voiceChecker = new VoiceChecker();
+            CompareResult result = voiceChecker.Compare(voice);
+
 
             SavedData loadedData = Helper.LoadSavedData();
 
@@ -162,6 +166,11 @@ namespace Industry4Control
         private void btn_clearFunction3_Click(object sender, EventArgs e)
         {
             m_ControlLogic.Function3Learned = false;
+        }
+
+        private void m_startServerButton_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

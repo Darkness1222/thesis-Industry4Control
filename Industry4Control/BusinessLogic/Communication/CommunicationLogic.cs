@@ -2,8 +2,10 @@
 using Industry4Control.EventArguments;
 using Industry4Control.Interfaces;
 using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Industry4Control.BusinessLogic.Communication
 {
@@ -94,7 +96,7 @@ namespace Industry4Control.BusinessLogic.Communication
                     {
                         byte[] bytes = new byte[2];
                         bytes[0] = 0xE;
-                        bytes[1] = (byte)((processStatus.ProcessType == ProcessType.Save ? 1 : 0 << 1) 
+                        bytes[1] = (byte)(((processStatus.ProcessType == ProcessType.Save ? 1 : 0) << 1) 
                             | (processStatus.Status ? 1:0));
                         
                         stream.Write(bytes, 0, 2);
@@ -105,13 +107,26 @@ namespace Industry4Control.BusinessLogic.Communication
 
         public void SendToPLC(string ipAddress, PLCControlMessage message)
         {
-            TcpClient client = new TcpClient(ipAddress, m_PlcPort);
-            NetworkStream stream = client.GetStream();
+            UdpClient udpClient = new UdpClient();
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(ipAddress), m_PlcPort);
+            udpClient.Connect(endPoint);
+
             byte[] bytes = new byte[2];
             bytes[0] = (byte)message.Function;
             bytes[1] = message.Value ? (byte)1 : (byte)0;
 
-            stream.Write(bytes, 0, 2);
+            try
+            {
+                udpClient.Send(bytes, 2);
+            }catch(SocketException e)
+            {
+                MessageBox.Show("PLC is not reachable");
+            }catch(Exception e)
+            {
+                MessageBox.Show("Error with the PLC-PC communication");
+            }
+
+            udpClient?.Close();
         }
 
         #endregion
@@ -145,10 +160,17 @@ namespace Industry4Control.BusinessLogic.Communication
             }catch(SocketException se)
             {
                 // Check whether the listening is canceled or there is another exception
-                if(se.ErrorCode != 10004)
+                if(se.ErrorCode == 10004)
+                {
+                    MessageBox.Show("Server is stopped.");
+                }
+                else
                 {
                     throw se;
                 }
+            }catch(System.IO.IOException ioException)
+            {
+                MessageBox.Show("Error in the listening process");
             }
         }
 

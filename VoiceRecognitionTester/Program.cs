@@ -50,7 +50,7 @@ namespace VoiceRecognitionTester
 
                 foreach(ControlFunction key in savedData.SavedFunctions.Keys)
                 {
-                    double result = customDtw.GetDtwValue(savedData.SavedFunctions[key]);
+                    double result = customDtw.Compare(savedData.SavedFunctions[key]).Item1;
                     Console.WriteLine(result);
                 }
 

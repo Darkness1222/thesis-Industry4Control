@@ -73,6 +73,7 @@
             this.m_startServerButton.TabIndex = 0;
             this.m_startServerButton.Text = "Start server";
             this.m_startServerButton.UseVisualStyleBackColor = true;
+            this.m_startServerButton.Click += new System.EventHandler(this.m_startServerButton_Click_1);
             // 
             // m_stopServerButton
             // 

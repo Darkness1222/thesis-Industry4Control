@@ -16,12 +16,14 @@ namespace Industry4Control.BusinessLogic
         private int m_LowerIndex;
         private int m_UpperIndex;
 
+        public Voice Voice { get { return m_Voice; } }
+
         public CustomDtw(Voice voice)
         {
             m_Voice = voice;
         }
 
-        public double GetDtwValue(Voice voice)
+        public Tuple<double, int> GetDtwValue(Voice voice)
         {
             double result = double.MaxValue;
 
@@ -32,24 +34,29 @@ namespace Industry4Control.BusinessLogic
 
             if (diff > 8)
             {
-                return double.MaxValue;
+                return null;
             }
 
             if (m_UpperIndex <= m_LowerIndex)
             {
-                return double.MaxValue;
+                return null;
             }
 
             double[,] dtwResultMatrix = new double[m_UpperIndex - m_LowerIndex, m_UpperIndex - m_LowerIndex];
+
+            var watch1 = System.Diagnostics.Stopwatch.StartNew();
 
             for (int i = 0; i < m_UpperIndex - m_LowerIndex; i++)
             {
                 for (int j = 0; j < m_UpperIndex - m_LowerIndex; j++)
                 {
-                    double smallDtwResult = RunSmallDtw(m_Voice.ParameterVectors[m_LowerIndex + i], voice.ParameterVectors[m_LowerIndex + j], i, j);
+                    double smallDtwResult = RunSmallDtw(m_Voice.ParameterVectors[m_LowerIndex + i], voice.ParameterVectors[m_LowerIndex + j]);
                     dtwResultMatrix[i, j] = smallDtwResult;
                 }
             }
+
+            watch1.Stop();
+            Console.WriteLine("Small DTW calculation time: " + watch1.ElapsedMilliseconds);
 
 #if DEBUG
 
@@ -67,23 +74,24 @@ namespace Industry4Control.BusinessLogic
 
 #endif
 
-            result = RunBigDTW(dtwResultMatrix);
+            var watch2 = System.Diagnostics.Stopwatch.StartNew();
+
+            Tuple<double, int> results = RunDtw(dtwResultMatrix);
+
+            //result = RunBigDTW(dtwResultMatrix);
+
+            watch2.Stop();
+
+            Console.WriteLine("Big DTW calculation time: " + watch2.ElapsedMilliseconds);
 
             m_DtwResultMatrix = dtwResultMatrix;
 
-            return result;
+            return results;
         }
 
-        public bool IsMatch(Voice voice)
+        public Tuple<double, int> Compare(Voice voice)
         {
-            double result = GetDtwValue(voice);
-
-            if (result < Limits.GetLimit(m_UpperIndex - m_LowerIndex))
-            {
-                return true;
-            }
-
-            return false;
+            return GetDtwValue(voice);
         }
 
         public double[,] GetDtwMatrix()
@@ -93,7 +101,7 @@ namespace Industry4Control.BusinessLogic
 
 
         // Done
-        private double RunSmallDtw(ParameterVector vector1, ParameterVector vector2, int x, int y)
+        private double RunSmallDtw(ParameterVector vector1, ParameterVector vector2)
         {
             short[] melSpectrum1 = vector1.GetMelSpectrum();
             short[] melSpectrum2 = vector2.GetMelSpectrum();
@@ -103,22 +111,25 @@ namespace Industry4Control.BusinessLogic
             {
                 for(int j = 0; j < 30; j++)
                 {
-                    if(Math.Abs(i-j) > 20)
+                    if(Math.Abs(i-j) > 18)
                     {
                         distances[i, j] = short.MaxValue; // ???
+                        continue;
                     }
-                    else
-                    {
-                        double diff = Math.Abs(melSpectrum1[i] - melSpectrum2[j]);
-                        distances[i, j] = diff * diff;
-                    }
+
+                    double diff = Math.Abs(melSpectrum1[i] - melSpectrum2[j]);
+                    distances[i, j] = diff * diff;
                 }
             }
 
-            double[,] dtwMatrix = new double[30,30];
+            Tuple<double, int> result = RunDtw(distances);
+
+            #region Commented
+
+            /*double[,] dtwMatrix = new double[30,30];
             dtwMatrix[0, 0] = 0;
             double max = 1;
-            for (int i = 1; i < 30; i++)
+            for (int i = 1; i < 19; i++)
             {
                 dtwMatrix[i, 0] = distances[i, 0] + dtwMatrix[i - 1, 0];
                 dtwMatrix[0, i] = distances[0, i] + dtwMatrix[0, i - 1];
@@ -131,24 +142,28 @@ namespace Industry4Control.BusinessLogic
             {
                 for(int j = 1; j < 30; j++)
                 {
-                    dtwMatrix[i, j] = distances[i,j] + Minimum(dtwMatrix[i - 1, j], dtwMatrix[i, j - 1], dtwMatrix[i - 1, j - 1]);
-                    if(dtwMatrix[i, j] > max)
+                    if(dtwMatrix[i,j] != short.MaxValue)
                     {
-                        max = dtwMatrix[i, j];
+                        dtwMatrix[i, j] = distances[i, j] + Minimum(dtwMatrix[i - 1, j], dtwMatrix[i, j - 1], dtwMatrix[i - 1, j - 1]);
+                        if (dtwMatrix[i, j] > max)
+                        {
+                            max = dtwMatrix[i, j];
+                        }
                     }
                 }
             }
-            
+
             // Scaling the values
-           /* for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 30; i++)
             {
-                for (int j = 0; j < 30; j++)
-                {
-                    dtwMatrix[i, j] =(dtwMatrix[i, j] / max) * 100;
-                }
+                 for (int j = 0; j < 30; j++)
+                 {
+                     dtwMatrix[i, j] =(dtwMatrix[i, j] / max) * 100;
+                 }
             }*/
 
-            using (StreamWriter writer = new StreamWriter("smallDtw\\smallDtw"+x+"_"+y+".txt"))
+#if DEBUG
+            /*using (StreamWriter writer = new StreamWriter("smallDtw\\smallDtw"+x+"_"+y+".txt"))
             {
                 for (int i = 0; i < dtwMatrix.GetLength(0); i++)
                 {
@@ -158,7 +173,8 @@ namespace Industry4Control.BusinessLogic
                     }
                     writer.Write("\n");
                 }
-            }
+            }*/
+#endif
 
             /*int k = 29, l = 29;
             double cost = 0;
@@ -192,7 +208,9 @@ namespace Industry4Control.BusinessLogic
 
             return cost;*/
 
-            return dtwMatrix[29, 29];
+            #endregion
+
+            return result.Item1;
         }
 
 
@@ -295,6 +313,90 @@ namespace Industry4Control.BusinessLogic
             if (a < b && a < c) return a;
             if (b < a && b < c) return b;
             return c;
+        }
+
+
+        private Tuple<double, int> RunDtw(double[,] distanceMatrix)
+        {
+            int steps = 99999; ;
+
+            if(distanceMatrix == null ||
+                distanceMatrix.GetLength(0) == 0 ||
+                distanceMatrix.GetLength(1) == 0 ||
+                distanceMatrix.GetLength(0) != distanceMatrix.GetLength(1))
+            {
+                return null;
+            }
+
+            int length = distanceMatrix.GetLength(0);
+            double[,] dtwMatrix = new double[length,length];
+            double max = 0;
+
+            for(int index = 1; index < length; index++)
+            {
+                dtwMatrix[index, 0] = distanceMatrix[index, 0] + dtwMatrix[index - 1, 0];
+                dtwMatrix[0, index] = distanceMatrix[0, index] + dtwMatrix[0, index - 1];
+
+                if (dtwMatrix[index, 0] > max) max = dtwMatrix[index, 0];
+                if (dtwMatrix[0, index] > max) max = dtwMatrix[0, index];
+            }
+
+            for(int x = 1; x < length; x++)
+            {
+                for(int y = 1; y < length; y++)
+                {
+                    dtwMatrix[x, y] = distanceMatrix[x, y] + Minimum(dtwMatrix[x - 1, y], dtwMatrix[x, y - 1], dtwMatrix[x - 1, y - 1]);
+
+                    if(dtwMatrix[x,y] > max)
+                    {
+                        max = dtwMatrix[x, y];
+                    }
+                }
+            }
+
+            // Scaling the values
+            for (int x = 0; x < length; x++)
+            {
+                for (int y = 0; y < length; y++)
+                {
+                    dtwMatrix[x, y] = (dtwMatrix[x, y] / max) * 100;
+                }
+            }
+
+
+            steps = 0;
+            int i = length-1, j = length-1;
+            while (i > 0 && j > 0)  
+            {
+                if (i == 0)
+                {
+                    j--;
+                }
+                else if (j == 0)
+                {
+                    i--;
+                }
+                else
+                {
+                    if (dtwMatrix[i - 1, j] == Minimum(dtwMatrix[i - 1, j], dtwMatrix[i, j - 1], dtwMatrix[i - 1, j - 1]))
+                    {
+                        i--;
+                    }
+                    else if (dtwMatrix[i, j - 1] == Minimum(dtwMatrix[i - 1, j], dtwMatrix[i, j - 1], dtwMatrix[i - 1, j - 1]))
+                    {
+                        j--;
+                    }
+                    else
+                    {
+                        i--;
+                        j--;
+                    }
+                }
+
+                steps++;
+            }
+
+            return new Tuple<double, int>(dtwMatrix[length - 1, length - 1], steps);
         }
 
     }

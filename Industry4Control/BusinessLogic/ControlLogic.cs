@@ -159,15 +159,15 @@ namespace Industry4Control.BusinessLogic
                     {
                         case 1:
                             Function1Status = true;
-                            //m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function1, true));
+                            m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function1, true));
                             break;
                         case 2:
                             Function2Status = true;
-                            //m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function2, true));
+                            m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function2, true));
                             break;
                         case 3:
                             Function3Status = true;
-                            //m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function3, true));
+                            m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function3, true));
                             break;
                     }
                     m_UIElement.RefreshFunctionStatus();
@@ -188,15 +188,15 @@ namespace Industry4Control.BusinessLogic
                         {
                             case ControlFunction.Function1:
                                 Function1Status = !result.IsMatch;
-                                //m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function1, Function1Status));
+                                m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function1, Function1Status));
                                 break;
                             case ControlFunction.Function2:
                                 Function2Status = !result.IsMatch;
-                                //m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function2, Function2Status));
+                                m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function2, Function2Status));
                                 break;
                             case ControlFunction.Function3:
                                 Function3Status = !result.IsMatch;
-                                //m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function3, Function3Status));
+                                m_CommunicationLogic.SendToPLC(m_UIElement.PlcAddress, new PLCControlMessage(ControlFunction.Function3, Function3Status));
                                 break;
                         }
                         m_UIElement.RefreshFunctionStatus();
