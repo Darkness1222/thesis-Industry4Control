@@ -243,8 +243,10 @@ namespace Industry4Control.BusinessLogic
                 }
             }
 
+#if DEBUG
+
             IList<Point> points = new List<Point>();
-            /*double cost = 0;
+            double cost = 0;
             int k = x - 1, l = x - 1;
             while (k > 0 && l > 0)  
             {
@@ -274,9 +276,9 @@ namespace Industry4Control.BusinessLogic
                 }
                 cost += dtwMatrix[k, l];
                 points.Add(new Point(k, l));
-            }*/
+            }
 
-#if DEBUG
+
 
             using (StreamWriter writer = new StreamWriter("bigDtw.txt"))
             {
